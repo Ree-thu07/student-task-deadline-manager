@@ -8,6 +8,7 @@ let editingTaskId = null;
 // ===============================
 
 document.addEventListener("DOMContentLoaded", loadTasks);
+document.getElementById("searchInput").addEventListener("input", loadTasks);
 
 
 // ===============================
@@ -114,9 +115,17 @@ async function loadTasks() {
 
         const tasks = await response.json();
 
-        displayTasks(tasks);
+const searchText = document.getElementById("searchInput").value.toLowerCase();
 
-        updateDashboard(tasks);
+const filteredTasks = tasks.filter(task =>
+    task.title.toLowerCase().includes(searchText) ||
+    task.subject.toLowerCase().includes(searchText) ||
+    task.priority.toLowerCase().includes(searchText) ||
+    task.status.toLowerCase().includes(searchText)
+);
+
+displayTasks(filteredTasks);
+updateDashboard(tasks);
 
     } catch (error) {
 
